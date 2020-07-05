@@ -1,15 +1,54 @@
-.grid div{
-	/* background-color: red; */
-	height: 20px;
-	width: 10px;
+#score{
+	display: inline-block;
+	font-size: 32px;
 }
-.grid{
-	background-color: yellow;
-	height: 400px;
-	width: 200px;
+div{
+	font-size: 20px;
+	font-weight: bold;
+	font-family: monospace;
+	text-align: center;
+}
+canvas{
+	display: block;
+	margin:0 auto;
+}
+body{
+	margin: 0;
+	height: 100vh;
 	display: flex;
-	flex-wrap: wrap;
+	flex-direction: column;
+	background: pink;
 }
-.tetromino{
-	background-color: blue;
+.content{
+	flex-grow: 1;
+	display: flex;
+	justify-content: space-between;
+}
+.header{
+	height: 15vh;
+}
+.heading{
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	height: 100%;
+}
+.footer{
+	position:fixed;
+	left:0px;
+	bottom:0px;
+	height:30px;
+	width:100%;
+	background-color: rgb(26, 26, 56);	
+	color: thistle;
+	font-size: 15px;
+}
+.sidebar{
+	width: 20vw;
+}
+#tetris{
+	align-self: center;
+}
+.count{
+	font-size: 32px;
 }

@@ -1,0 +1,34 @@
+<html>
+<head>
+    <title>Tetris Game </title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+   <div class="header">
+	   <h1 class="heading">Tetris with Vanilla JS</h1>
+	</div><br>
+   <div class="content">
+   		<div class="sidebar left">
+			   <h5>
+				   The old Tetris Game recreated
+			   </h5>
+			   <div class="count">Score : <div id="score">0</div></div>
+		   </div>
+    		<canvas id="tetris" width="200" height="400">
+			</canvas>
+		<div class="sidebar right">
+			<h4>Steps to Play</h4>
+			<ul>
+				<li>You know the rules :)</li>
+				<li>For movement, use the LEFT, RIGHT and the DOWN arrow keys.</li>
+				<li>For rotating a piece, use the UP arrow key.</li>
+			</ul>
+		</div>
+	</div>
+	<div class="footer">
+		Made with 💖 by Nilesh
+	</div>
+    <script src="tetrominoes.js"></script>
+    <script src="tetris.js"></script>
+</body>
+</html>
