@@ -2,34 +2,34 @@ const cvs = document.getElementById("tetris");
 const ctx = cvs.getContext("2d");
 const scoreElement = document.getElementById("score");
 
-const ROW = 20;
-const COL = COLUMN = 10;
-const SQ = squareSize = 20;
-const VACANT = "WHITE"; // color of an empty square
+const row = 20;
+const col = column = 10;
+const sq = squareSize = 20;
+const vacantBoxColor = "WHITE"; 
 
 // draw a square
 function drawSquare(x, y, color) {
 	ctx.fillStyle = color;
-	ctx.fillRect(x * SQ, y * SQ, SQ, SQ);
+	ctx.fillRect(x * sq, y * sq, sq, sq);
 
 	ctx.strokeStyle = "BLACK";
-	ctx.strokeRect(x * SQ, y * SQ, SQ, SQ);
+	ctx.strokeRect(x * sq, y * sq, sq, sq);
 }
 
 // create the board
 
 let board = [];
-for (r = 0; r < ROW; r++) {
+for (r = 0; r < row; r++) {
 	board[r] = [];
-	for (c = 0; c < COL; c++) {
-		board[r][c] = VACANT;
+	for (c = 0; c < col; c++) {
+		board[r][c] = vacantBoxColor;
 	}
 }
 
 // draw the board
 function drawBoard() {
-	for (r = 0; r < ROW; r++) {
-		for (c = 0; c < COL; c++) {
+	for (r = 0; r < row; r++) {
+		for (c = 0; c < col; c++) {
 			drawSquare(c, r, board[r][c]);
 		}
 	}
@@ -50,34 +50,27 @@ const PIECES = [
 ];
 
 // generate random pieces
-
 function randomPiece() {
 	let r = randomN = Math.floor(Math.random() * PIECES.length) // 0 -> 6
 	return new Piece(PIECES[r][0], PIECES[r][1]);
 }
 
-let p = randomPiece();
-
+let ran = randomPiece();
 // The Object Piece
-
 function Piece(tetromino, color) {
 	this.tetromino = tetromino;
 	this.color = color;
 
-	this.tetrominoN = 0; // we start from the first pattern
+	this.tetrominoN = 0; 
 	this.activeTetromino = this.tetromino[this.tetrominoN];
-
-	// we need to control the pieces
 	this.x = 3;
 	this.y = -2;
 }
 
 // fill function
-
 Piece.prototype.fill = function (color) {
 	for (r = 0; r < this.activeTetromino.length; r++) {
 		for (c = 0; c < this.activeTetromino.length; c++) {
-			// we draw only occupied squares
 			if (this.activeTetromino[r][c]) {
 				drawSquare(this.x + c, this.y + r, color);
 			}
@@ -86,29 +79,24 @@ Piece.prototype.fill = function (color) {
 }
 
 // draw a piece to the board
-
 Piece.prototype.draw = function () {
 	this.fill(this.color);
 }
 
 // undraw a piece
-
-
 Piece.prototype.unDraw = function () {
-	this.fill(VACANT);
+	this.fill(vacantBoxColor);
 }
 
 // move Down the piece
-
 Piece.prototype.moveDown = function () {
 	if (!this.collision(0, 1, this.activeTetromino)) {
 		this.unDraw();
 		this.y++;
 		this.draw();
 	} else {
-		// we lock the piece and generate a new one
 		this.lock();
-		p = randomPiece();
+		ran = randomPiece();
 	}
 
 }
@@ -137,19 +125,19 @@ Piece.prototype.rotate = function () {
 	let kick = 0;
 
 	if (this.collision(0, 0, nextPattern)) {
-		if (this.x > COL / 2) {
-			// it's the right wall
-			kick = -1; // we need to move the piece to the left
+		if (this.x > col / 2) {
+			// right wall touched
+			kick = -1; 
 		} else {
-			// it's the left wall
-			kick = 1; // we need to move the piece to the right
+			//  left wall touched
+			kick = 1; 
 		}
 	}
 
 	if (!this.collision(kick, 0, nextPattern)) {
 		this.unDraw();
 		this.x += kick;
-		this.tetrominoN = (this.tetrominoN + 1) % this.tetromino.length; // (0+1)%4 => 1
+		this.tetrominoN = (this.tetrominoN + 1) % this.tetromino.length; 
 		this.activeTetromino = this.tetromino[this.tetrominoN];
 		this.draw();
 	}
@@ -160,13 +148,13 @@ let score = 0;
 Piece.prototype.lock = function () {
 	for (r = 0; r < this.activeTetromino.length; r++) {
 		for (c = 0; c < this.activeTetromino.length; c++) {
-			// we skip the vacant squares
+			//skip the empty squares
 			if (!this.activeTetromino[r][c]) {
 				continue;
 			}
 			// pieces to lock on top = game over
 			if (this.y + r < 0) {
-				alert("Game Over");
+				alert("Game Over. Thank You 😄");
 				// stop request animation frame
 				gameOver = true;
 				break;
@@ -176,24 +164,23 @@ Piece.prototype.lock = function () {
 		}
 	}
 	// remove full rows
-	for (r = 0; r < ROW; r++) {
+	for (r = 0; r < row; r++) {
 		let isRowFull = true;
-		for (c = 0; c < COL; c++) {
-			isRowFull = isRowFull && (board[r][c] != VACANT);
+		for (c = 0; c < col; c++) {
+			isRowFull = isRowFull && (board[r][c] != vacantBoxColor);
 		}
 		if (isRowFull) {
 			// if the row is full
 			// we move down all the rows above it
 			for (y = r; y > 1; y--) {
-				for (c = 0; c < COL; c++) {
+				for (c = 0; c < col; c++) {
 					board[y][c] = board[y - 1][c];
 				}
 			}
 			// the top row board[0][..] has no row above it
-			for (c = 0; c < COL; c++) {
-				board[0][c] = VACANT;
+			for (c = 0; c < col; c++) {
+				board[0][c] = vacantBoxColor;
 			}
-			// increment the score
 			score += 10;
 		}
 	}
@@ -205,7 +192,7 @@ Piece.prototype.lock = function () {
 }
 
 // collision fucntion
-
+//the part where I personally took a lot of time 
 Piece.prototype.collision = function (x, y, piece) {
 	for (r = 0; r < piece.length; r++) {
 		for (c = 0; c < piece.length; c++) {
@@ -218,7 +205,7 @@ Piece.prototype.collision = function (x, y, piece) {
 			let newY = this.y + r + y;
 
 			// conditions
-			if (newX < 0 || newX >= COL || newY >= ROW) {
+			if (newX < 0 || newX >= col || newY >= row) {
 				return true;
 			}
 			// skip newY < 0; board[-1] will crush our game
@@ -226,7 +213,7 @@ Piece.prototype.collision = function (x, y, piece) {
 				continue;
 			}
 			// check if there is a locked piece alrady in place
-			if (board[newY][newX] != VACANT) {
+			if (board[newY][newX] != vacantBoxColor) {
 				return true;
 			}
 		}
@@ -240,16 +227,16 @@ document.addEventListener("keydown", CONTROL);
 
 function CONTROL(event) {
 	if (event.keyCode == 37) {
-		p.moveLeft();
+		ran.moveLeft();
 		dropStart = Date.now();
 	} else if (event.keyCode == 38) {
-		p.rotate();
+		ran.rotate();
 		dropStart = Date.now();
 	} else if (event.keyCode == 39) {
-		p.moveRight();
+		ran.moveRight();
 		dropStart = Date.now();
 	} else if (event.keyCode == 40) {
-		p.moveDown();
+		ran.moveDown();
 	}
 }
 
@@ -261,7 +248,7 @@ function drop() {
 	let now = Date.now();
 	let delta = now - dropStart;
 	if (delta > 1000) {
-		p.moveDown();
+		ran.moveDown();
 		dropStart = Date.now();
 	}
 	if (!gameOver) {
